@@ -6,7 +6,6 @@ import Loader from 'react-loader-advanced'
 class App extends Component {
   state = {
     students: {},
-    searchStudent: [],
     search: false,
     sorted: [],
     sortMarksBy: 'desc'
@@ -55,9 +54,8 @@ class App extends Component {
   handleSearch = e => {
     let name = `^${e.target.value}`
     let regex = new RegExp(name, "gi");  
-    console.log(this.state.searchStudent,"bane")
     this.setState(prevState => ({
-      searchStudent: Object.keys(prevState.students).filter(student =>
+      sorted: Object.keys(prevState.students).filter(student =>
         ("" + prevState.students[student].name).match(regex)
       ),
       search: true
@@ -116,9 +114,10 @@ class App extends Component {
           <button className="btn btn-primary mx-2" onClick={this.toggleSort.bind(this)}>Sort by Name</button>
           <button className="btn btn-primary mx-2" onClick={this.toggleMarks}>Sort by Marks</button>
         </header>
+        <div class="container-fluid" >
         <div className='row'>
-          {Object.keys(this.state.searchStudent).length == 0 && this.state.search ? <div className="col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center">No Result Found</div> :
-            ((!sorted.length) ? !this.state.search ? Object.keys(this.state.students) : this.state.searchStudent : sorted).map(student => (
+          {Object.keys(this.state.sorted).length == 0 && this.state.search ? <div className="col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center">No Result Found</div> :
+            ((!sorted.length) ? !this.state.search ? Object.keys(this.state.students) : sorted : sorted).map(student => (
               <div key={student} onClick={this.handleCard.bind(this, student)} className="card col-md-4 col-sm-6 col-xs-12" style={{width: "18rem"}}>
                 <div className="card-body">
                   <h5 className="card-title">Name: {this.state.students[student].name}</h5>
@@ -130,6 +129,7 @@ class App extends Component {
           </div>)
           )
           }
+        </div>
         </div>
       </div>
     );
