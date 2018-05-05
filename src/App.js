@@ -15,12 +15,12 @@ class App extends Component {
     this.setState(prevState => {
       if (prevState.sortMarksBy === "asc") {
         return {
-          sorted: Object.keys(prevState.students).sort((a, b) => prevState.students[a].name.localeCompare(prevState.students[b].name)),
+          sorted: prevState.sorted.sort((a, b) => prevState.students[a].name.localeCompare(prevState.students[b].name)),
           sortMarksBy: 'desc'
         }
       } else {
         return {
-        sorted: Object.keys(prevState.students).sort((a, b) => prevState.students[b].name.localeCompare(prevState.students[a].name)),
+        sorted: prevState.sorted.sort((a, b) => prevState.students[b].name.localeCompare(prevState.students[a].name)),
         sortMarksBy: 'asc'
         }
       }
@@ -29,9 +29,10 @@ class App extends Component {
 
   toggleMarks = () => {
     this.setState(prevState => {
+      console.log(prevState,"rpevadf")
       if(prevState.sortMarksBy === "asc"){
         return {
-          sorted: Object.keys(prevState.students).sort((a, b) => Object.keys(prevState.students[a].marks).reduce((acc, initital) => {
+          sorted: prevState.sorted.sort((a, b) => Object.keys(prevState.students[a].marks).reduce((acc, initital) => {
             return acc + prevState.students[a].marks[initital]
           }, 0) - Object.keys(prevState.students[b].marks).reduce((acc, initital) => {
             return acc + prevState.students[b].marks[initital]
@@ -40,7 +41,7 @@ class App extends Component {
         }
       } else {
         return {
-          sorted: Object.keys(prevState.students).sort((a, b) => Object.keys(prevState.students[b].marks).reduce((acc, initital) => {
+          sorted: prevState.sorted.sort((a, b) => Object.keys(prevState.students[b].marks).reduce((acc, initital) => {
             return acc + prevState.students[b].marks[initital]
           }, 0) - Object.keys(prevState.students[a].marks).reduce((acc, initital) => {
             return acc + prevState.students[a].marks[initital]
@@ -93,11 +94,11 @@ class App extends Component {
           <div className="chart">
           {
                 Object.keys(this.state.students[this.props.match.params.number].marks).map(data => (
-                  <div key={data}>
-                    <span>{data}
-                  <div className="progress my-4">
+                  <div key={data} className="d-flex">
+                      <p>{data}</p>
+                      <div className="progress mx-4 w-75 mt-1">
                       <div className="progress-bar" role="progressbar" style={{ width: `${this.state.students[this.props.match.params.number].marks[data]}%` }} aria-valuenow="25" aria-valuemin="0" aria-valuemax={"" + this.state.students[this.props.match.params.number].marks[data]}>{this.state.students[this.props.match.params.number].marks[data]}%</div>
-                      </div></span>
+                      </div>
                   </div>
                 ))
           }
@@ -114,7 +115,7 @@ class App extends Component {
           <button className="btn btn-primary mx-2" onClick={this.toggleSort.bind(this)}>Sort by Name</button>
           <button className="btn btn-primary mx-2" onClick={this.toggleMarks}>Sort by Marks</button>
         </header>
-        <div class="container-fluid" >
+        <div className="container-fluid" >
         <div className='row'>
           {Object.keys(this.state.sorted).length == 0 && this.state.search ? <div className="col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center">No Result Found</div> :
             ((!sorted.length) ? !this.state.search ? Object.keys(this.state.students) : sorted : sorted).map(student => (
