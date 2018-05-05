@@ -13,14 +13,15 @@ class App extends Component {
 
   toggleSort = () => {
     this.setState(prevState => {
+      console.log(prevState.sorted)
       if (prevState.sortMarksBy === "asc") {
         return {
-          sorted: prevState.sorted.sort((a, b) => prevState.students[a].name.localeCompare(prevState.students[b].name)),
+          sorted: (!prevState.sorted.length ? Object.keys(prevState.students)  : prevState.sorted).sort((a, b) => prevState.students[a].name.localeCompare(prevState.students[b].name)),
           sortMarksBy: 'desc'
         }
       } else {
         return {
-          sorted: prevState.sorted.sort((a, b) => prevState.students[b].name.localeCompare(prevState.students[a].name)),
+          sorted: (!prevState.sorted.length ? Object.keys(prevState.students) : prevState.sorted).sort((a, b) => prevState.students[b].name.localeCompare(prevState.students[a].name)),
           sortMarksBy: 'asc'
         }
       }
@@ -31,7 +32,7 @@ class App extends Component {
     this.setState(prevState => {
       if (prevState.sortMarksBy === "asc") {
         return {
-          sorted: prevState.sorted.sort((a, b) => Object.keys(prevState.students[a].marks).reduce((acc, initital) => {
+          sorted: (!prevState.sorted.length ? Object.keys(prevState.students) : prevState.sorted).sort((a, b) => Object.keys(prevState.students[a].marks).reduce((acc, initital) => {
             return acc + prevState.students[a].marks[initital]
           }, 0) - Object.keys(prevState.students[b].marks).reduce((acc, initital) => {
             return acc + prevState.students[b].marks[initital]
@@ -40,7 +41,7 @@ class App extends Component {
         }
       } else {
         return {
-          sorted: prevState.sorted.sort((a, b) => Object.keys(prevState.students[b].marks).reduce((acc, initital) => {
+          sorted: (!prevState.sorted.length ? Object.keys(prevState.students) : prevState.sorted).sort((a, b) => Object.keys(prevState.students[b].marks).reduce((acc, initital) => {
             return acc + prevState.students[b].marks[initital]
           }, 0) - Object.keys(prevState.students[a].marks).reduce((acc, initital) => {
             return acc + prevState.students[a].marks[initital]
