@@ -48,7 +48,8 @@ class App extends Component {
     }
     else if (this.props.match.path === "/:number"){
       return (
-      <div className="card col-md-4 col-sm-6 col-xs-12" style={{ width: "18rem" }}>
+        <div className="d-flex justify-content-center p-4">
+          <div className="card" style={{ width: "80%" }}>
         <div className="card-body">
           <h5 className="card-title">Name: {this.state.students[this.props.match.params.number].name}</h5>
             <h5 className="card-title">Id: {this.props.match.params.number}</h5>
@@ -69,6 +70,7 @@ class App extends Component {
           }
           </div>
         </div>
+            </div>
       </div>)
     }
     else {
