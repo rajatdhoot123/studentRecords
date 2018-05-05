@@ -14,14 +14,22 @@ class App extends Component {
 
   toggleSort = () => {
     this.setState(prevState => {
-      sorted: Object.keys(prevState.students).sort((a, b) =>  prevState.students[a] - prevState.students[b] )
+      if (prevState.sortMarksBy === "asc") {
+        return {
+          sorted: Object.keys(prevState.students).sort((a, b) => prevState.students[a].name.localeCompare(prevState.students[b].name)),
+          sortMarksBy: 'desc'
+        }
+      } else {
+        return {
+        sorted: Object.keys(prevState.students).sort((a, b) => prevState.students[b].name.localeCompare(prevState.students[a].name)),
+        sortMarksBy: 'asc'
+        }
+      }
     })
-  }
-  
+  }  
 
   toggleMarks = () => {
     this.setState(prevState => {
-      console.log(prevState)
       if(prevState.sortMarksBy === "asc"){
         return {
           sorted: Object.keys(prevState.students).sort((a, b) => Object.keys(prevState.students[a].marks).reduce((acc, initital) => {
@@ -45,8 +53,9 @@ class App extends Component {
   }
 
   handleSearch = e => {
-    let x = `^${e.target.value}`
-    let regex = new RegExp(x, "gi");  
+    let name = `^${e.target.value}`
+    let regex = new RegExp(name, "gi");  
+    console.log(this.state.searchStudent,"bane")
     this.setState(prevState => ({
       searchStudent: Object.keys(prevState.students).filter(student =>
         ("" + prevState.students[student].name).match(regex)
@@ -104,8 +113,8 @@ class App extends Component {
       <div className="App">
         <header className="sticky-top d-flex p-4">
             <input className="form-control mx-2" type="search" onChange={this.handleSearch.bind(this)} placeholder="Search" aria-label="Search" />
-          <button className="btn btn-primary mx-2" onClick={this.toggleSort.bind(this)}>Sort</button>
-          <button className="btn btn-primary mx-2" onClick={this.toggleMarks}>{`Marks Order `+sortMarksBy}</button>
+          <button className="btn btn-primary mx-2" onClick={this.toggleSort.bind(this)}>Sort by Name</button>
+          <button className="btn btn-primary mx-2" onClick={this.toggleMarks}>Sort by Marks</button>
         </header>
         <div className='row'>
           {Object.keys(this.state.searchStudent).length == 0 && this.state.search ? <div className="col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center">No Result Found</div> :
