@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import axios from "axios";
 import Loader from 'react-loader-advanced'
-import { Route } from 'react-router-dom'
-import Student from './student';
 
 class App extends Component {
   state = {
@@ -60,10 +57,10 @@ class App extends Component {
           <div className="chart">
           {
                 Object.keys(this.state.students[this.props.match.params.number].marks).map(data => (
-                  <div>
+                  <div key={data}>
                     <span>{data}
-                  <div class="progress my-4">
-                      <div class="progress-bar" role="progressbar" style={{ width: `${this.state.students[this.props.match.params.number].marks[data]}%` }} aria-valuenow="25" aria-valuemin="0" aria-valuemax={"" + this.state.students[this.props.match.params.number].marks[data]}>{this.state.students[this.props.match.params.number].marks[data]}%</div>
+                  <div className="progress my-4">
+                      <div className="progress-bar" role="progressbar" style={{ width: `${this.state.students[this.props.match.params.number].marks[data]}%` }} aria-valuenow="25" aria-valuemin="0" aria-valuemax={"" + this.state.students[this.props.match.params.number].marks[data]}>{this.state.students[this.props.match.params.number].marks[data]}%</div>
                       </div></span>
                   </div>
                 ))
