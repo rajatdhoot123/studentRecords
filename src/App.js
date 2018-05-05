@@ -7,15 +7,43 @@ class App extends Component {
   state = {
     students: {},
     searchStudent: [],
-    search: false
+    search: false,
+    sorted: [],
+    sortMarksBy: 'desc'
   }
 
   toggleSort = () => {
     this.setState(prevState => {
-      students: Object.keys(prevState.students).sort().reduce((r, k) => (r[k] = prevState.students[k], r), {});
+      sorted: Object.keys(prevState.students).sort((a, b) =>  prevState.students[a] - prevState.students[b] )
     })
   }
   
+
+  toggleMarks = () => {
+    this.setState(prevState => {
+      console.log(prevState)
+      if(prevState.sortMarksBy === "asc"){
+        return {
+          sorted: Object.keys(prevState.students).sort((a, b) => Object.keys(prevState.students[a].marks).reduce((acc, initital) => {
+            return acc + prevState.students[a].marks[initital]
+          }, 0) - Object.keys(prevState.students[b].marks).reduce((acc, initital) => {
+            return acc + prevState.students[b].marks[initital]
+          }, 0)),
+          sortMarksBy: 'desc'
+        }
+      } else {
+        return {
+          sorted: Object.keys(prevState.students).sort((a, b) => Object.keys(prevState.students[b].marks).reduce((acc, initital) => {
+            return acc + prevState.students[b].marks[initital]
+          }, 0) - Object.keys(prevState.students[a].marks).reduce((acc, initital) => {
+            return acc + prevState.students[a].marks[initital]
+          }, 0)),
+          sortMarksBy: 'asc'
+        }
+      }
+    })
+  }
+
   handleSearch = e => {
     let x = `^${e.target.value}`
     let regex = new RegExp(x, "gi");  
@@ -40,6 +68,7 @@ class App extends Component {
   }
 
   render() {
+    let { sorted, sortMarksBy } = this.state
     if(Object.keys(this.state.students).length == 0){
       return (<Loader show={true} message={'loading'} />)
     }
@@ -76,11 +105,11 @@ class App extends Component {
         <header className="sticky-top d-flex p-4">
             <input className="form-control mx-2" type="search" onChange={this.handleSearch.bind(this)} placeholder="Search" aria-label="Search" />
           <button className="btn btn-primary mx-2" onClick={this.toggleSort.bind(this)}>Sort</button>
-          <button className="btn btn-primary mx-2">Asending</button>
+          <button className="btn btn-primary mx-2" onClick={this.toggleMarks}>{`Marks Order `+sortMarksBy}</button>
         </header>
         <div className='row'>
           {Object.keys(this.state.searchStudent).length == 0 && this.state.search ? <div className="col-md-12 col-sm-12 col-xs-12 d-flex justify-content-center">No Result Found</div> :
-          (!this.state.search ? Object.keys(this.state.students) : this.state.searchStudent).map(student => (
+            ((!sorted.length) ? !this.state.search ? Object.keys(this.state.students) : this.state.searchStudent : sorted).map(student => (
               <div key={student} onClick={this.handleCard.bind(this, student)} className="card col-md-4 col-sm-6 col-xs-12" style={{width: "18rem"}}>
                 <div className="card-body">
                   <h5 className="card-title">Name: {this.state.students[student].name}</h5>
