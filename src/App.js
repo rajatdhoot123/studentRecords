@@ -81,6 +81,17 @@ class App extends Component {
       return (<Loader show={true} message={'loading'} />)
     }
     else if (this.props.match.path === "/:number") {
+      if (!students[this.props.match.params.number]){
+        return (
+          <div className="d-flex justify-content-center p-4">
+            <div className="card" style={{ width: "80%" }}>
+              <div className="card-body">
+                No records found for Roll No. {this.props.match.params.number}
+              </div>
+            </div>
+          </div>
+        )
+      }
       return (
         <div className="d-flex justify-content-center p-4">
           <div className="card" style={{ width: "80%" }}>
