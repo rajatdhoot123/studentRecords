@@ -102,6 +102,9 @@ class App extends Component {
                     </div>
                   ))
                 }
+                <div className="d-flex justify-content-center">
+                <button className="btn btn-outline-primary btn-sm" onClick={() => this.props.history.goBack()}>Go Back</button>
+                </div>
               </div>
             </div>
           </div>
